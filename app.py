@@ -39,8 +39,8 @@ username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
 
 # Adres docelowy
-base_url = "https://xyz.ag3nts.org/"
-sub_url = "verify"
+base_url = os.getenv("BASE_URL")
+sub_url = os.getenv("SUB_URL")
 
 if __name__ == "__main__":
     mission_number = input("Enter mission number (1 or 2): ")

@@ -59,7 +59,7 @@ def generate_answer(text):
         messages=[
         {"role": "system", "content": "Return only the answer, not the question. Remember that stolicą Polski jest Kraków, The Hitchhiker's Guide to the Galaxy by Douglas Adams is 69, Aktualny rok to 1999"},
         {"role": "user", "content": text},
-        {"role": "user", "content": "Translate the answer to english."}
+        {"role": "user", "content": "Translate the answer to english. If the answer is numeric, return it as a number."}
     ]
     ).choices[0].message.content
 
