@@ -21,7 +21,7 @@ from langfuse.openai import openai # OpenAI integration
 
 import os
 from dotenv import load_dotenv
-
+from send_response import send_response
 load_dotenv()
 
 def mission_3(api_key):
@@ -52,10 +52,8 @@ def mission_3(api_key):
             #print(test)
     #print(json_txt_file)
 
-    response = requests.post(os.getenv("RAPORT_URL"), json={"task": "JSON", "apikey": os.getenv("MY_API"), "answer": json_txt_file})
-    response_json = response.json()
-
-    print("Response json:", response_json)
+    response = send_response(os.getenv("RAPORT_URL"), "JSON", json_txt_file)
+    print("Response:", response)
 
 @observe()
 def generate_answer(question):

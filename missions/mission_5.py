@@ -24,7 +24,8 @@ from bs4 import BeautifulSoup
 
 import os
 from dotenv import load_dotenv
-
+from send_response import send_response 
+from get_answer import generate_answer, process_recordings
 load_dotenv()
 
 def mission_5(api_key):
@@ -50,9 +51,9 @@ def mission_5(api_key):
                 
             # Combine all text contents
         txt_file = "\n".join(text_contents)
-        print("--------------------------------")
-        print("Text file:", txt_file)
-        print("--------------------------------")
+        #print("--------------------------------")
+        #print("Text file:", txt_file)
+        #print("--------------------------------")
         # Write the combined text to a file
         with open("transcriptions.txt", "w", encoding="utf-8") as f:
             f.write(txt_file)
@@ -68,41 +69,19 @@ def mission_5(api_key):
         with open("transcriptions.txt", "r", encoding="utf-8") as f:
             txt_file = f.read()
 
-    answer = generate_answer(txt_file)
+    aiModel = "gpt-4.1"
+    aiMessage = [{"role": "system", "content": "Return only the answer, not the question. In the text extract the information about name of the institute where proffesor Andrzej Maj was teaching. W internecie znajdz adres instytutu. Zwróc tylko nazwe ulicy bez słowa ulica i bez numeru."},
+                 {"role": "user", "content": txt_file}]
+
+    answer = generate_answer(aiModel, aiMessage)
     print("--------------------------------")
     print("Answer:", answer)
     print("--------------------------------")
     
-    response = requests.post(os.getenv("RAPORT_URL"), json={"task": "mp3", "apikey": os.getenv("MY_API"), "answer": answer})
-    response_json = response.json()
+    response = send_response(os.getenv("RAPORT_URL"), "mp3", answer)
+    print("Response:", response)
 
-    print("Response json:", response_json)
-
-
-
-# Generate answer using GPT-4.1 Nano
-@observe()
-def generate_answer(text):
-    answer = openai.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-        {"role": "system", "content": "Return only the answer, not the question. In the text extract the information about name of the institute where proffesor Andrzej Maj was teaching. W internecie znajdz adres instytutu. Zwróc tylko nazwe ulicy bez słowa ulica i bez numeru."},
-        {"role": "user", "content": text}
+    # Clean up temp file
+    #os.remove("temp.zip")  
 
 
-    ]
-    ).choices[0].message.content
-    return answer
-
-# Process audio files and return transcription
-@observe()
-def process_recordings(recording):
-    
-    audio_file= open(recording, "rb")
-
-    transcription = openai.audio.transcriptions.create(
-        model="whisper-1", 
-        file=audio_file
-    )
-
-    return transcription.text

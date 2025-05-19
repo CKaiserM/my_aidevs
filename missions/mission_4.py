@@ -22,28 +22,21 @@ from bs4 import BeautifulSoup
 
 import os
 from dotenv import load_dotenv
+from send_response import send_response
+from get_answer import generate_answer
 
 load_dotenv()
 
 def mission_4(api_key):
-    openai.api_key = api_key
     txt_file = requests.get(os.getenv("CENTRALA_FILE_2"))
     print(txt_file.text)
-    answer = generate_answer(txt_file.text)
+
+    aiModel = "gpt-4.1-nano"
+    aiMessage = [{"role": "system", "content": "Return only the answer, not the question. Change full name and surname to single word CENZURA, change the only the city name to CENZURA, change only the Street name and street number to single word CENZURA, finally find age and change only the number to CENZURA."},
+                 {"role": "user", "content": txt_file.text}]
+    answer = generate_answer(aiModel, aiMessage)
     print(answer)
+    response = send_response(os.getenv("RAPORT_URL"), "CENZURA", answer)
+    print("Response:", response)
 
-    response = requests.post(os.getenv("RAPORT_URL"), json={"task": "CENZURA", "apikey": os.getenv("MY_API"), "answer": answer})
-    response_json = response.json()
 
-    print("Response json:", response_json)
-
-@observe()
-def generate_answer(text):
-    answer = openai.chat.completions.create(
-        model="gpt-4.1-nano",
-        messages=[
-        {"role": "system", "content": "Return only the answer, not the question. Change full name and surname to single word CENZURA, change the only the city name to CENZURA, change only the Street name and street number to single word CENZURA, finally find age and change only the number to CENZURA."},
-        {"role": "user", "content": text}
-    ]
-    ).choices[0].message.content
-    return answer
