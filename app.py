@@ -27,7 +27,9 @@ import openai
 import re
 from missions.mission_1 import mission_1
 from missions.mission_2 import mission_2
-
+from missions.mission_3 import mission_3
+from missions.mission_4 import mission_4
+from missions.mission_5 import mission_5
 import os
 from dotenv import load_dotenv
 
@@ -43,15 +45,21 @@ base_url = os.getenv("BASE_URL")
 sub_url = os.getenv("SUB_URL")
 
 if __name__ == "__main__":
-    mission_number = input("Enter mission number (1 or 2): ")
+    mission_number = input("Enter mission number (1 or 2 or 3 or 4 or 5): ")
     
     match mission_number:
         case "1":
             mission_1(base_url, username, password, api_key)
         case "2":
             mission_2(base_url, sub_url, api_key)
+        case "3":
+            mission_3(api_key)
+        case "4":
+            mission_4(api_key)
+        case "5":
+            mission_5(api_key)
         case _:
-            print("Invalid mission number. Please enter 1 or 2.")
+            print("Invalid mission number. Please enter 1 or 2 or 3 or 4 or 5.")
     exit()
 
 
