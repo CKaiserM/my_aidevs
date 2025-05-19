@@ -1,3 +1,11 @@
+"""
+This module provides functions to generate answers from GPT-4.1 Nano and process audio files.
+
+Functions:
+    generate_answer(aiModel, aiMessage): Generates an answer from GPT-4.1 Nano.
+    process_recordings(recording): Processes audio files and returns their transcriptions.
+
+"""
 from langfuse.decorators import observe
 from langfuse.openai import openai # OpenAI integration
 import os
