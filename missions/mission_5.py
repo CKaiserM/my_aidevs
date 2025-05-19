@@ -80,6 +80,7 @@ def mission_5(api_key):
 
 
 
+# Generate answer using GPT-4.1 Nano
 @observe()
 def generate_answer(text):
     answer = openai.chat.completions.create(
@@ -93,6 +94,7 @@ def generate_answer(text):
     ).choices[0].message.content
     return answer
 
+# Process audio files and return transcription
 @observe()
 def process_recordings(recording):
     
