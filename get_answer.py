@@ -3,7 +3,8 @@ This module provides functions to generate answers from GPT-4.1 Nano and process
 
 Functions:
     generate_answer(aiModel, aiMessage): Generates an answer from GPT-4.1 Nano.
-    process_recordings(recording): Processes audio files and returns their transcriptions.
+    process_recordings(recording): Processes audio files and returns their transcriptions.  
+    process_image(image_path, prompt): Processes images and returns their answers.
 
 """
 from langfuse.decorators import observe

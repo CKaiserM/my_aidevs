@@ -1,14 +1,24 @@
 """
-Mission 6 Module        
+Mission 6 Module
 
-This module handles the sixth mission which involves:
-1. Processing an image
-2. Storing results for later analysis
+This module processes a map image to identify city locations. It analyzes multiple map fragments
+to determine street names, landmarks, and urban layouts to identify which city the map represents.
+
+The module looks specifically for:
+- Street names and layouts
+- Notable landmarks like churches, cemeteries, schools, stores
+- Urban features like granaries and fortresses
+- Consistency between map fragments to verify city identification
+
+Functions:
+    mission_6(api_key): Processes a map image and returns the identified city name
 
 Dependencies:
-    - os: For file and directory operations
+    - requests: For making HTTP requests
+    - re: For regular expressions
+    - os: For file operations
     - dotenv: For loading environment variables
-    - get_answer: For processing the image
+    - get_answer: For image processing using AI
 """
 
 import requests
