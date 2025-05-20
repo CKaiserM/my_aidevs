@@ -9,7 +9,7 @@ Functions:
 from langfuse.decorators import observe
 from langfuse.openai import openai # OpenAI integration
 import os
-
+import base64
 # Get answer from GPT-4.1 Nano
 
 @observe()
@@ -34,3 +34,33 @@ def process_recordings(recording):
     )
 
     return transcription.text
+
+@observe()
+# Function to encode the image
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+def process_image(image_path, prompt):
+
+    # Getting the Base64 string
+    base64_image = encode_image(image_path)
+
+
+    response = openai.responses.create(
+        model="gpt-4.1",
+        input=[
+            {
+                "role": "user",
+                "content": [
+                    { "type": "input_text", "text": prompt },
+                    {
+                        "type": "input_image",
+                        "image_url": f"data:image/jpeg;base64,{base64_image}",
+                    },
+                ],
+            }
+        ],
+    )
+
+    return response.output_text
