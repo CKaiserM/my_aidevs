@@ -39,7 +39,7 @@ Sprawdź, czy wykryte nazwy obiektów są poprawne. Pomiń numery dróg. Sprawd�
 Rozpoznaj lokalizacje o takim samym układzie ulic i obiektów, z twierdzą i spichlerzami. Upewnij się, że lokalizacje, które rozpoznajesz na mapie, na pewno znajdują się w mieście, które zamierzasz zwrócić jako odpowiedź.
 Jakie miasta znajdują się na obrazie? Które fragmenty mapy pochodzą z tego samego miasta? Zwróć tylko nazwę miasta."""
     
-    answer = process_image("mapa/mapa.jpg", prompt)
+    answer = process_image("mapa/mapa.jpg", prompt, "gpt-4.1", "jpeg")
     print("--------------------------------")
     print("Answer:", answer)
     print("--------------------------------")

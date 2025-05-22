@@ -16,7 +16,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 def send_response(url, task, answer):
-    response = requests.post(url, json={"task": task, "apikey": os.getenv("MY_API"), "answer": answer})
+    print("Sending response to:", url)
+    print("Task:", task)
+    print("Answer:", answer)
+    response = requests.post(url, json={"task": task, "apikey": os.getenv("MY_API"), "answer": answer}, headers={'Content-Type': 'application/json; charset=utf-8'})
     response_json = response.json()
     #print("Response json:", response_json)
 

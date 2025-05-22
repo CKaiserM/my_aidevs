@@ -42,14 +42,14 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
-def process_image(image_path, prompt):
+def process_image(image_path, prompt, model, extension):
 
     # Getting the Base64 string
     base64_image = encode_image(image_path)
 
 
     response = openai.responses.create(
-        model="gpt-4.1",
+        model=model,
         input=[
             {
                 "role": "user",
@@ -57,7 +57,7 @@ def process_image(image_path, prompt):
                     { "type": "input_text", "text": prompt },
                     {
                         "type": "input_image",
-                        "image_url": f"data:image/jpeg;base64,{base64_image}",
+                        "image_url": f"data:image/{extension};base64,{base64_image}",
                     },
                 ],
             }
@@ -65,3 +65,13 @@ def process_image(image_path, prompt):
     )
 
     return response.output_text
+
+@observe()
+def generate_image(prompt):
+    result = openai.images.generate(
+        model="dall-e-3",
+        prompt=prompt,
+        size="1024x1024"
+    )
+
+    return result.data[0].url
