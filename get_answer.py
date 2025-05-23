@@ -36,6 +36,26 @@ def process_recordings(recording):
 
     return transcription.text
 
+
+def process_image_from_url(image_url, prompt, model):
+    response = openai.chat.completions.create(
+        model=model,
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": image_url,
+                    },
+                },
+            ],
+        }],
+    )
+
+    return response.choices[0].message.content
+
 @observe()
 # Function to encode the image
 def encode_image(image_path):
