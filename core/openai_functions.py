@@ -99,7 +99,8 @@ def generate_image(prompt):
 @observe()
 def generate_embeddings(text, model):
     result = openai.embeddings.create(
-        model=model,
-        input=text
+        input=text,
+        model=model
     )
-    return result.data[0].embedding
+
+    return result

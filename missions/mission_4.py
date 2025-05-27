@@ -22,8 +22,8 @@ from bs4 import BeautifulSoup
 
 import os
 from dotenv import load_dotenv
-from send_response import send_response
-from get_answer import generate_answer
+from core.send_response import send_response
+from core.openai_functions import generate_answer
 
 load_dotenv()
 

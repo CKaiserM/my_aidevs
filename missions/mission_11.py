@@ -1,49 +1,53 @@
 """
-    This script performs semantic search using vector embeddings and Qdrant vector database.
-    
-    The process involves:
-    1. Creating text embeddings using OpenAI's embedding model
-    2. Storing embeddings in a Qdrant collection with metadata
-    3. Performing semantic search on the collection
-    
-    Key components:
-    - OpenAI embeddings API for converting text to vectors
-    - Qdrant vector database for storing and searching embeddings
-    - Collection configuration with cosine distance metric
-    - Search functionality to find semantically similar content
-    
-    The script specifically searches for mentions of weapon prototype theft
-    in dated reports and returns the relevant report date.
-    
-    Returns:
-        str: Filename of the report containing weapon theft information
-        
-    Environment variables required:
-        - RAPORT_URL: URL endpoint for submitting the answer
+Mission 11 Module
+
+This module searches through dated weapon test reports to identify potential theft incidents.
+It uses semantic search powered by vector embeddings to analyze report contents.
+
+The module:
+1. Processes text files from weapons_tests/do-not-share directory
+2. Converts report dates from DDMMYYYY to YYYY-MM-DD format
+3. Creates vector embeddings of report contents using OpenAI's API
+4. Stores embeddings and metadata in Qdrant vector database
+5. Performs semantic search to find mentions of weapon prototype theft
+
+Dependencies:
+    - openai: For generating text embeddings
+    - qdrant_client: For vector database operations
+    - os: For file operations
+    - dotenv: For loading environment variables
+    - core.send_response: For submitting results
+    - core.openai_functions: For embedding generation
+    - core.qdrant_functions: For Qdrant database operations
+
+Returns:
+    str: Date of the report containing weapon theft information in YYYY-MM-DD format
+
+Environment variables:
+    - RAPORT_URL: Endpoint for submitting the identified report date
+    - OPENAI_API_KEY: For OpenAI API access
+    - QDRANT_URL: Qdrant server URL
+    - QDRANT_API: Qdrant API key
 """
 import openai
 import os
 import qdrant_client
 from dotenv import load_dotenv
 from qdrant_client.models import VectorParams, Distance, PointStruct
-from send_response import send_response
+from core.send_response import send_response
+from core.openai_functions import generate_embeddings
+from core.qdrant_functions import check_if_collection_exists, create_collection, insert_points_into_collection, search_collection    
+
 load_dotenv()
 
 def mission_11():   
-    openai_client = openai.Client(
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
-
-    client = qdrant_client.QdrantClient(
-        url=os.getenv("QDRANT_URL"),
-        api_key=os.getenv("QDRANT_API")
-    )   
 
     collection_name = "weapons_tests_collection"
+    # Map models to their vector sizes
+
     embedding_model = "text-embedding-3-small"
     # Check if collection exists
-    collections = client.get_collections()
-    if collection_name not in [collection.name for collection in collections.collections]:
+    if not check_if_collection_exists(collection_name):
         # Read files from directory
         texts = []
         filenames = []
@@ -61,10 +65,7 @@ def mission_11():
 
         # Create embeddings
 
-        result = openai_client.embeddings.create(
-            input=texts,
-            model=embedding_model
-        )
+        result = generate_embeddings(texts, embedding_model)
 
         # Convert to qdrant points with filename metadata
         points = [
@@ -80,34 +81,19 @@ def mission_11():
         ]
 
         # Create and configure collection
-        client.create_collection(
-            collection_name,
-            vectors_config=VectorParams(
-                size=1536,
-                distance=Distance.COSINE,
-            ),
-        )
+        create_collection(collection_name, embedding_model)
 
-        # Insert points into collection
-        client.upsert(collection_name, points)
+        insert_points_into_collection(collection_name, points)
     else:
         print("Collection already exists")
     
     question = "W raporcie, z którego dnia znajduje się wzmianka o kradzieży prototypu broni?"
-    response = client.search(
-    collection_name=collection_name,
-    query_vector=openai_client.embeddings.create(
-        input=[question],
-        model=embedding_model,
-        )
-        .data[0]
-        .embedding,
-    )
+    response = search_collection(collection_name, embedding_model, question)
     answer = response[0].payload["filename"]
     print(answer)
     raport = send_response(os.getenv("RAPORT_URL"), "wektory", str(answer))
     print("--------------------------------")
-    print("Mission 10 completed")
+    print("Mission 11 completed")
     print("--------------------------------")
     print("Response:", raport)     
 

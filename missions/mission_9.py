@@ -21,8 +21,8 @@ import os
 import html2text
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from send_response import send_response 
-from get_answer import process_image, process_recordings, generate_answer, process_image_from_url
+from core.send_response import send_response 
+from core.openai_functions import process_image, process_recordings, generate_answer, process_image_from_url
 
 load_dotenv()
 

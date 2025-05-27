@@ -24,8 +24,8 @@ from bs4 import BeautifulSoup
 
 import os
 from dotenv import load_dotenv
-from send_response import send_response 
-from get_answer import generate_answer, process_recordings
+from core.send_response import send_response 
+from core.openai_functions import generate_answer, process_recordings
 load_dotenv()
 
 def mission_5(api_key):

@@ -21,7 +21,7 @@ from langfuse.openai import openai # OpenAI integration
 
 import os
 from dotenv import load_dotenv
-from send_response import send_response
+from core.send_response import send_response
 load_dotenv()
 
 def mission_3(api_key):

@@ -19,8 +19,8 @@ import re
 import json
 import os
 from dotenv import load_dotenv
-from send_response import send_response 
-from get_answer import process_image, process_recordings, generate_answer
+from core.send_response import send_response 
+from core.openai_functions import process_image, process_recordings, generate_answer
 
 load_dotenv()
 

@@ -25,7 +25,7 @@ import requests
 import re
 import os
 from dotenv import load_dotenv
-from get_answer import process_image
+from core.openai_functions import process_image
 
 load_dotenv()
 
