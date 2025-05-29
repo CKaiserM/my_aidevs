@@ -25,3 +25,24 @@ def send_response(url, task, answer):
 
     return response_json
 
+def send_response_to_api_db(url, task, query):
+    print("Sending response to:", url)
+    print("Task:", task)
+    print("Answer:", query)
+    response = requests.post(url, json={"task": task, "apikey": os.getenv("MY_API"), "query": query}, headers={'Content-Type': 'application/json; charset=utf-8'})
+    response_json = response.json()
+    #print("Response json:", response_json)
+
+    return response_json
+
+def send_response_to_centrala(url, query):
+    print("Sending response to:", url)
+
+    print("Answer:", query)
+    response = requests.post(url, json={"apikey": os.getenv("MY_API"), "query": query}, headers={'Content-Type': 'application/json; charset=utf-8'})
+    response_json = response.json()
+    #print("Response json:", response_json)
+
+    return response_json
+
+
