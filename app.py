@@ -38,6 +38,7 @@ from missions.mission_10 import mission_10
 from missions.mission_11 import mission_11
 from missions.mission_12 import mission_12
 from missions.mission_13 import mission_13
+from missions.mission_14 import mission_14
 import os
 from dotenv import load_dotenv
 
@@ -53,7 +54,7 @@ base_url = os.getenv("BASE_URL")
 sub_url = os.getenv("SUB_URL")
 
 if __name__ == "__main__":
-    mission_number = input("Enter mission number (1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13): ")
+    mission_number = input("Enter mission number (1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14 ): ")
     
     match mission_number:
         case "1":
@@ -82,8 +83,10 @@ if __name__ == "__main__":
             mission_12()
         case "13":
             mission_13()
+        case "14":
+            mission_14()
         case _:
-            print("Invalid mission number. Please enter 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13.")
+            print("Invalid mission number. Please enter 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14.")
     exit()
 
 
