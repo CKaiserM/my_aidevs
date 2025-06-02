@@ -25,6 +25,15 @@ def send_response(url, task, answer):
 
     return response_json
 
+def chat_with_api(url, task, answer):
+    print("Sending response to:", url)
+    print("Task:", task)
+    print("Answer:", answer)
+    response = requests.post(url, json={"task": task, "apikey": os.getenv("MY_API"), "answer": answer}, headers={'Content-Type': 'application/json; charset=utf-8'})
+    response_json = response.json()
+    #print("Response json:", response_json)
+    return response_json
+
 def send_response_to_api_db(url, task, query):
     print("Sending response to:", url)
     print("Task:", task)

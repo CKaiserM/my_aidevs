@@ -56,6 +56,49 @@ def process_image_from_url(image_url, prompt, model):
 
     return response.choices[0].message.content
 
+def process_multiple_images_from_url(image_urls, prompt, model):
+    response = openai.chat.completions.create(
+        model=model,
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                *[{
+                    "type": "image_url",
+                    "image_url": {
+                        "url": url,
+                    },
+                } for url in image_urls],
+            ],
+        }],
+    )
+
+    return response.choices[0].message.content
+
+def process_multiple_images_from_path(image_paths, user_prompt, system_prompt, model):
+
+    base64_images = [encode_image(image_path) for image_path in image_paths]
+    response = openai.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system",
+            "content": system_prompt
+            },
+            {"role": "user",
+            "content": [
+                {"type": "text", "text": user_prompt},
+                *[{
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{base64_image}",
+                    },
+                } for base64_image in base64_images],
+            ],
+        }],
+    )
+
+    return response.choices[0].message.content
+
 @observe()
 # Function to encode the image
 def encode_image(image_path):
